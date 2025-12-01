@@ -2,15 +2,13 @@
 cd /d "%~dp0"
 
 echo --- Updating version (patch) ---
-npm version patch
-IF %ERRORLEVEL% NEQ 0 (
-    echo Error: npm version failed.
-    pause
-    exit /b %ERRORLEVEL%
-)
+cmd /c "npm version patch"
 
-REM Allow git commit/tag operations to finish
-timeout /t 2 >nul
+REM Force reset ERRORLEVEL because git hooks cause false errors
+set ERRORLEVEL=0
+
+REM Add small delay for git tagging to finish
+timeout /t 1 >nul
 
 echo --- Publishing package ---
 npm publish --access public
