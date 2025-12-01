@@ -23,7 +23,8 @@
       </div>
       <div class="form-row">
           <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="aws.label.name"></span></label>
-          <input type="text" id="node-input-name" data-i18n="[placeholder]aws.placeholder.name">
+          <input type="text" id="node-input-name" style="width: 70%;" data-i18n="[placeholder]aws.placeholder.name">
+          <input type="hidden" id="node-input-nameType">
       </div>
 </script>
 <script type="text/javascript">
@@ -37,6 +38,7 @@
             filepattern: {value:""},
             filepatternType: {value:"str"},
             name: {value:""},
+            nameType: {value:"str"},
             pollingInterval: {value:900},
             pollingIntervalType: {value:"str"}
         },
@@ -70,6 +72,14 @@
             });
             $("#node-input-pollingInterval").typedInput('type', this.pollingIntervalType || 'str');
             $("#node-input-pollingInterval").typedInput('value', this.pollingInterval ? String(this.pollingInterval) : '900');
+            
+            $("#node-input-name").typedInput({
+                default: 'str',
+                types: ['str', 'msg', 'flow', 'global', 'env'],
+                typeField: "#node-input-nameType"
+            });
+            $("#node-input-name").typedInput('type', this.nameType || 'str');
+            $("#node-input-name").typedInput('value', this.name || '');
         },
         oneditsave: function() {
             this.bucketType = $("#node-input-bucketType").val();
@@ -84,6 +94,9 @@
             if (interval < 30) interval = 30; // Минимум 30 секунд
             this.pollingInterval = interval;
             this.pollingIntervalType = $("#node-input-pollingIntervalType").val();
+            
+            this.nameType = $("#node-input-nameType").val();
+            this.name = $("#node-input-name").typedInput('value');
         }
     });
 </script>
@@ -99,20 +112,20 @@
     </div>
     <div class="form-row node-input-filename">
         <label for="node-input-filename"><i class="fa fa-file"></i> <span data-i18n="aws.label.filename"></span></label>
-        <input type="text" id="node-input-filename" data-i18n="[placeholder]aws.placeholder.filename">
+        <input type="text" id="node-input-filename" style="width: 70%;" data-i18n="[placeholder]aws.placeholder.filename">
+        <input type="hidden" id="node-input-filenameType">
     </div>
     <div class="form-row">
         <label for="node-input-createSignedUrl"><i class="fa fa-link"></i>
             <span data-i18n="aws.label.createSignedUrl"></span>
         </label>
-        <select type="text" id="node-input-createSignedUrl" style="width:70%;">
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-        </select>
+        <input type="text" id="node-input-createSignedUrl" style="width: 70%;" placeholder="no">
+        <input type="hidden" id="node-input-createSignedUrlType">
     </div>
     <div class="form-row">
         <label for="node-input-urlExpiration"><i class="fa fa-clock-o"></i> <span data-i18n="aws.label.urlExpiration"></span></label>
-        <input type="number" id="node-input-urlExpiration" placeholder="URL Expiration (seconds)">
+        <input type="text" id="node-input-urlExpiration" style="width: 70%;" placeholder="60">
+        <input type="hidden" id="node-input-urlExpirationType">
     </div>
     <div class="form-row">
         <label for="node-input-returnBuffer"><i class="fa fa-file"></i>
@@ -123,7 +136,8 @@
     </div>
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="aws.label.name"></span></label>
-        <input type="text" id="node-input-name" data-i18n="[placeholder]aws.placeholder.name">
+        <input type="text" id="node-input-name" style="width: 70%;" data-i18n="[placeholder]aws.placeholder.name">
+        <input type="hidden" id="node-input-nameType">
     </div>
 </script>
 <script type="text/javascript">
@@ -135,11 +149,15 @@
             bucket: {value:""},
             bucketType: {value:"str"},
             filename: {value:""},
+            filenameType: {value:"str"},
             name: {value:""},
+            nameType: {value:"str"},
             createSignedUrl: {value:"no"},
+            createSignedUrlType: {value:"str"},
             returnBuffer: {value:"yes"},
             returnBufferType: {value:"str"},
-            urlExpiration: {value:60}
+            urlExpiration: {value:60},
+            urlExpirationType: {value:"str"}
         },
         inputs:1,
         outputs:1,
@@ -156,10 +174,30 @@
             });
             $("#node-input-bucket").typedInput('type', this.bucketType || 'str');
             $("#node-input-bucket").typedInput('value', this.bucket || '');
-            $("#node-input-urlExpiration").val(this.urlExpiration || 60);
             
-            // Устанавливаем значения для select элементов
-            $("#node-input-createSignedUrl").val(this.createSignedUrl || 'no');
+            $("#node-input-filename").typedInput({
+                default: 'str',
+                types: ['str', 'msg', 'flow', 'global', 'env'],
+                typeField: "#node-input-filenameType"
+            });
+            $("#node-input-filename").typedInput('type', this.filenameType || 'str');
+            $("#node-input-filename").typedInput('value', this.filename || '');
+            
+            $("#node-input-createSignedUrl").typedInput({
+                default: 'str',
+                types: ['str', 'msg', 'flow', 'global', 'env'],
+                typeField: "#node-input-createSignedUrlType"
+            });
+            $("#node-input-createSignedUrl").typedInput('type', this.createSignedUrlType || 'str');
+            $("#node-input-createSignedUrl").typedInput('value', this.createSignedUrl || 'no');
+            
+            $("#node-input-urlExpiration").typedInput({
+                default: 'str',
+                types: ['str', 'msg', 'flow', 'global', 'env'],
+                typeField: "#node-input-urlExpirationType"
+            });
+            $("#node-input-urlExpiration").typedInput('type', this.urlExpirationType || 'str');
+            $("#node-input-urlExpiration").typedInput('value', this.urlExpiration ? String(this.urlExpiration) : '60');
             
             $("#node-input-returnBuffer").typedInput({
                 default: 'str',
@@ -168,15 +206,34 @@
             });
             $("#node-input-returnBuffer").typedInput('type', this.returnBufferType || 'str');
             $("#node-input-returnBuffer").typedInput('value', this.returnBuffer || 'yes');
+            
+            $("#node-input-name").typedInput({
+                default: 'str',
+                types: ['str', 'msg', 'flow', 'global', 'env'],
+                typeField: "#node-input-nameType"
+            });
+            $("#node-input-name").typedInput('type', this.nameType || 'str');
+            $("#node-input-name").typedInput('value', this.name || '');
         },
         oneditsave: function() {
             this.bucketType = $("#node-input-bucketType").val();
             this.bucket = $("#node-input-bucket").typedInput('value');
-            var expiration = parseInt($("#node-input-urlExpiration").val()) || 60;
+            this.filenameType = $("#node-input-filenameType").val();
+            this.filename = $("#node-input-filename").typedInput('value');
+            
+            this.createSignedUrlType = $("#node-input-createSignedUrlType").val();
+            this.createSignedUrl = $("#node-input-createSignedUrl").typedInput('value');
+            
+            var expirationValue = $("#node-input-urlExpiration").typedInput('value');
+            var expiration = parseInt(expirationValue) || 60;
+            if (expiration < 1) expiration = 60; // Минимум 1 секунда
             this.urlExpiration = expiration;
-            this.createSignedUrl = $("#node-input-createSignedUrl").val();
+            this.urlExpirationType = $("#node-input-urlExpirationType").val();
+            
             this.returnBufferType = $("#node-input-returnBufferType").val();
             this.returnBuffer = $("#node-input-returnBuffer").typedInput('value');
+            this.nameType = $("#node-input-nameType").val();
+            this.name = $("#node-input-name").typedInput('value');
         }
     });
 </script>
@@ -192,15 +249,18 @@
       </div>
       <div class="form-row node-input-filename">
            <label for="node-input-filename"><i class="fa fa-file"></i> <span data-i18n="aws.label.filename"></span></label>
-           <input type="text" id="node-input-filename" data-i18n="[placeholder]aws.placeholder.filename">
+           <input type="text" id="node-input-filename" style="width: 70%;" data-i18n="[placeholder]aws.placeholder.filename">
+           <input type="hidden" id="node-input-filenameType">
       </div>
       <div class="form-row node-input-localFilename">
            <label for="node-input-localFilename"><i class="fa fa-file"></i> <span data-i18n="aws.label.local"></span></label>
-           <input type="text" id="node-input-localFilename" data-i18n="[placeholder]aws.placeholder.local">
+           <input type="text" id="node-input-localFilename" style="width: 70%;" data-i18n="[placeholder]aws.placeholder.local">
+           <input type="hidden" id="node-input-localFilenameType">
       </div>
       <div class="form-row">
           <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="aws.label.name"></span></label>
-          <input type="text" id="node-input-name" data-i18n="[placeholder]aws.placeholder.name">
+          <input type="text" id="node-input-name" style="width: 70%;" data-i18n="[placeholder]aws.placeholder.name">
+          <input type="hidden" id="node-input-nameType">
       </div>
       <div class="form-row">
           <input type="checkbox" id="node-input-sendOutput" style="width: auto; margin-right: 8px;">
@@ -216,8 +276,11 @@
             bucket: {value:""},
             bucketType: {value:"str"},
             filename: {value:""},
+            filenameType: {value:"str"},
             localFilename: {value:""},
+            localFilenameType: {value:"str"},
             name: {value:""},
+            nameType: {value:"str"},
             sendOutput: {value:false},
             outputs: {value:0}
         },
@@ -237,12 +300,42 @@
             $("#node-input-bucket").typedInput('type', this.bucketType || 'str');
             $("#node-input-bucket").typedInput('value', this.bucket || '');
             
+            $("#node-input-filename").typedInput({
+                default: 'str',
+                types: ['str', 'msg', 'flow', 'global', 'env'],
+                typeField: "#node-input-filenameType"
+            });
+            $("#node-input-filename").typedInput('type', this.filenameType || 'str');
+            $("#node-input-filename").typedInput('value', this.filename || '');
+            
+            $("#node-input-localFilename").typedInput({
+                default: 'str',
+                types: ['str', 'msg', 'flow', 'global', 'env'],
+                typeField: "#node-input-localFilenameType"
+            });
+            $("#node-input-localFilename").typedInput('type', this.localFilenameType || 'str');
+            $("#node-input-localFilename").typedInput('value', this.localFilename || '');
+            
+            $("#node-input-name").typedInput({
+                default: 'str',
+                types: ['str', 'msg', 'flow', 'global', 'env'],
+                typeField: "#node-input-nameType"
+            });
+            $("#node-input-name").typedInput('type', this.nameType || 'str');
+            $("#node-input-name").typedInput('value', this.name || '');
+            
             // Устанавливаем состояние чекбокса
             $("#node-input-sendOutput").prop("checked", this.sendOutput === true || this.sendOutput === "true");
         },
         oneditsave: function() {
             this.bucketType = $("#node-input-bucketType").val();
             this.bucket = $("#node-input-bucket").typedInput('value');
+            this.filenameType = $("#node-input-filenameType").val();
+            this.filename = $("#node-input-filename").typedInput('value');
+            this.localFilenameType = $("#node-input-localFilenameType").val();
+            this.localFilename = $("#node-input-localFilename").typedInput('value');
+            this.nameType = $("#node-input-nameType").val();
+            this.name = $("#node-input-name").typedInput('value');
             var hasOutput = $("#node-input-sendOutput").is(":checked");
             this.sendOutput = hasOutput;
             this.outputs = hasOutput ? 1 : 0;

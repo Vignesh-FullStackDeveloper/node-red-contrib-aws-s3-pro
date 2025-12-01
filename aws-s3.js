@@ -79,6 +79,8 @@ module.exports = function(RED) {
         this.filepatternType = n.filepatternType || 'str';
         this.pollingInterval = n.pollingInterval || 900; // По умолчанию 15 минут
         this.pollingIntervalType = n.pollingIntervalType || 'str';
+        this.name = n.name || "";
+        this.nameType = n.nameType || 'str';
         const node = this;
 
         /**
@@ -318,12 +320,17 @@ module.exports = function(RED) {
         this.bucket = n.bucket;
         this.bucketType = n.bucketType || 'str';
         this.filename = n.filename || "";
+        this.filenameType = n.filenameType || 'str';
         this.createSignedUrl = n.createSignedUrl || 'no';
+        this.createSignedUrlType = n.createSignedUrlType || 'str';
         this.returnBuffer = n.returnBuffer || 'yes';
         this.returnBufferType = n.returnBufferType || 'str';
+        this.name = n.name || "";
+        this.nameType = n.nameType || 'str';
         // Преобразуем urlExpiration в число, гарантируем минимум 1 секунду
         const expiration = parseInt(n.urlExpiration, 10);
         this.urlExpiration = (!isNaN(expiration) && expiration > 0) ? expiration : 60;
+        this.urlExpirationType = n.urlExpirationType || 'str';
         const node = this;
 
         /**
@@ -365,7 +372,7 @@ module.exports = function(RED) {
 
         node.on("input", async (msg) => {
             const bucket = getBucket(msg);
-            const filename = node.filename || msg.filename;
+            const filename = msg.filename || getValue(node.filename, node.filenameType, msg);
 
             if (!bucket) {
                 node.error(RED._("aws.error.no-bucket-specified"), msg);
@@ -382,11 +389,13 @@ module.exports = function(RED) {
 
             const s3 = configureS3(node, msg, getValue);
             const returnBufferValue = getValue(node.returnBuffer, node.returnBufferType, msg) || 'yes';
+            const createSignedUrlValue = getValue(node.createSignedUrl, node.createSignedUrlType, msg) || 'no';
+            const urlExpirationValue = parseInt(getValue(String(node.urlExpiration), node.urlExpirationType, msg)) || 60;
 
-            if (node.createSignedUrl === 'yes') {
+            if (createSignedUrlValue === 'yes' || createSignedUrlValue === true || createSignedUrlValue === 'true') {
                 try {
                     node.status({ fill: "blue", shape: "dot", text: "aws.status.generating-url" });
-                    const signedUrl = await generateSignedUrl(s3, bucket, filename, node.urlExpiration);
+                    const signedUrl = await generateSignedUrl(s3, bucket, filename, urlExpirationValue);
                     msg.payload = signedUrl;
                     node.status({}); // Сбрасываем статус при успешном выполнении
                     node.send(msg);
@@ -409,7 +418,11 @@ module.exports = function(RED) {
         this.bucket = n.bucket;
         this.bucketType = n.bucketType || 'str';
         this.filename = n.filename || "";
+        this.filenameType = n.filenameType || 'str';
         this.localFilename = n.localFilename || "";
+        this.localFilenameType = n.localFilenameType || 'str';
+        this.name = n.name || "";
+        this.nameType = n.nameType || 'str';
         this.sendOutput = n.sendOutput === true || n.sendOutput === "true";
         const node = this;
 
@@ -456,13 +469,13 @@ module.exports = function(RED) {
                 return;
             }
 
-            const filename = node.filename || msg.filename;
+            const filename = msg.filename || getValue(node.filename, node.filenameType, msg);
             if (!filename) {
                 node.error(RED._("aws.error.no-filename-specified"), msg);
                 return;
             }
 
-            const localFilename = node.localFilename || msg.localFilename;
+            const localFilename = msg.localFilename || getValue(node.localFilename, node.localFilenameType, msg);
 
             const contentType = msg.contentType || 'application/octet-stream';
 
