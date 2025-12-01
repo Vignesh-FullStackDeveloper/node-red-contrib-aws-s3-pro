@@ -1,12 +1,14 @@
 node-red-contrib-aws-s3-pro
 =================
 
-Edited by: Andrii Lototskyi
+A <a href="http://nodered.org" target="_new">Node-RED</a> node for Amazon S3 operations with **production-grade connection pooling**.
 
-A <a href="http://nodered.org" target="_new">Node-RED</a> node to watch, send
-and receive files from an Amazon S3 bucket.
-
-This version of the module uses the latest version of the AWS SDK v3
+**Key Features:**
+- ✅ **Connection Pooling** - Shared connections across all nodes for optimal performance
+- ✅ **AWS SDK v3** - Latest AWS SDK with modern architecture
+- ✅ **All S3 Operations** - Support for 100+ S3 API operations
+- ✅ **Automatic Connection Management** - TTL-based refresh and cleanup
+- ✅ **HTTP Keep-Alive** - Reuses TCP connections for better performance
 
 Install
 -------
@@ -18,34 +20,87 @@ Run the following command in the root directory of your Node-RED install
 Usage
 -----
 
-### Amazon S3 watch node
+### Configuration Node (aws-s3-config)
 
-Watches for file events on an Amazon S3 bucket. By default all
-file events are reported, but the filename pattern can be supplied
-to limit the events to files which have full filenames that match
-the glob pattern. The event messages consist of the full filename
-in `msg.payload` property, the filename in `msg.file`,
-the event type in `msg.event`.
+Configure your AWS credentials and connection settings. Supports:
+- Access Key ID and Secret Access Key (from string, msg, flow, global, or env)
+- IAM Role authentication (recommended for EC2/ECS/Lambda)
+- Custom endpoints (for S3-compatible services)
+- Region configuration
 
-### Amazon S3 input node
+**Note:** All nodes using the same configuration share the same connection pool automatically.
 
-Downloads content from an Amazon S3 bucket. The bucket name can be specified in
-the node **bucket** property or in the `msg.bucket` property.
-The name of the file to download is taken from the node <b>filename</b> property
-or the `msg.filename` property. The downloaded content is sent as `msg.payload`
-property.
-If you want to get response like buffer you can choose property **Response Buffer** 
-in node's settings. Also you can get temporary link to download file, for this option 
-you need choose property **Public Link** with value <b>yes</b> and you can set time 
-for temporary link in seconds (default 60 sec). If the download fails `msg.error` will contain an error object.
+### Amazon S3 Node (aws-s3) - Generic API Node
 
+A generic node that supports **all S3 operations** using AWS SDK v3. This node provides
+access to the complete S3 API including bucket management, object operations, 
+multipart uploads, and advanced features.
 
-### Amazon S3 out node.
+**Features:**
+- ✅ Supports all 100+ S3 operations (ListBuckets, GetObject, PutObject, DeleteObject, etc.)
+- ✅ **Connection pooling** - Automatically shares connections with other nodes
+- ✅ Parameters provided via message object (msg.Bucket, msg.Key, etc.)
+- ✅ Automatic JSON parsing for complex objects
+- ✅ Special handling for GetObject streaming (returns buffer in msg.payload)
+- ✅ Dual output: success (first output) and error (second output)
 
-Uploads content to an Amazon S3 bucket. The bucket name can be specified in the
-node <b>bucket</b> property or in the `msg.bucket` property. The filename on
-Amazon S3 is taken from the node <b>filename</b> property or the
-`msg.filename` property. The content is taken from either the node
-<b>localFilename</b> property, the `msg.localFilename` property or
-the `msg.payload` property. 
-Also you can set content type of your file, for this you need send param `msg.contentType`.
+**Usage Examples:**
+
+**ListBuckets** - List all buckets:
+```
+No parameters needed
+```
+
+**ListObjects** - List objects in a bucket:
+```javascript
+msg.Bucket = "my-bucket"
+// Optional: msg.Prefix = "folder/"
+```
+
+**GetObject** - Download a file:
+```javascript
+msg.Bucket = "my-bucket"
+msg.Key = "path/to/file.txt"
+// Result: msg.payload contains the file content as buffer
+//         msg.s3Metadata contains file metadata
+```
+
+**PutObject** - Upload a file:
+```javascript
+msg.Bucket = "my-bucket"
+msg.Key = "path/to/file.txt"
+msg.payload = "file content" // or Buffer
+// Optional: msg.ContentType = "text/plain"
+```
+
+**DeleteObject** - Delete a file:
+```javascript
+msg.Bucket = "my-bucket"
+msg.Key = "path/to/file.txt"
+```
+
+**CopyObject** - Copy a file:
+```javascript
+msg.Bucket = "destination-bucket"
+msg.CopySource = "source-bucket/source-key"
+msg.Key = "destination-key"
+```
+
+For complex parameters, provide JSON strings in the message - they will be automatically parsed.
+
+### Connection Pooling
+
+**How it works:**
+- All nodes using the same AWS configuration share a single connection pool
+- Connections are automatically reused across multiple requests
+- Connections refresh after 30 minutes (TTL) to ensure freshness
+- Automatic cleanup of expired connections every 5 minutes
+- HTTP keep-alive enabled for optimal TCP connection reuse
+
+**Benefits:**
+- Reduced connection overhead
+- Better performance for high-frequency operations
+- Lower memory usage
+- Automatic connection lifecycle management
+
+**Example:** If you have 10 `aws-s3` nodes using the same `aws-s3-config`, they all share the same connection pool automatically.
