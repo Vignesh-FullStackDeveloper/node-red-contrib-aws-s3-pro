@@ -76,7 +76,9 @@ module.exports = function(RED) {
         this.bucket = n.bucket;
         this.bucketType = n.bucketType || 'str';
         this.filepattern = n.filepattern || "";
+        this.filepatternType = n.filepatternType || 'str';
         this.pollingInterval = n.pollingInterval || 900; // По умолчанию 15 минут
+        this.pollingIntervalType = n.pollingIntervalType || 'str';
         const node = this;
 
         /**
@@ -143,6 +145,7 @@ module.exports = function(RED) {
         const initializePolling = () => {
             const bucketValue = getBucket({});
             const s3 = configureS3(node, {}, getValue);
+            const emptyMsg = {};
 
             node.listAllObjects(s3, { Bucket: bucketValue }, contents, function (err, data) {
                 if (err) {
@@ -150,12 +153,19 @@ module.exports = function(RED) {
                     node.status({ fill: "red", shape: "ring", text: "aws.status.error" });
                     return;
                 }
-                const filteredContents = node.filterContents(data);
+                const filepatternValue = getValue(node.filepattern, node.filepatternType, emptyMsg) || "";
+                const filteredContents = node.filterContents(data, filepatternValue);
                 node.state = filteredContents.map(e => e.Key);
                 node.status({ fill: "green", shape: "dot", text: `Monitoring ${node.state.length} files` });
 
                 // Настраиваемый интервал polling (в секундах), преобразуем в миллисекунды
-                const pollingInterval = (n.pollingInterval || 900) * 1000;
+                let pollingIntervalValue;
+                if (node.pollingIntervalType && node.pollingIntervalType !== 'str') {
+                    pollingIntervalValue = getValue(String(node.pollingInterval || 900), node.pollingIntervalType, emptyMsg);
+                } else {
+                    pollingIntervalValue = node.pollingInterval || 900;
+                }
+                const pollingInterval = (parseInt(pollingIntervalValue) || 900) * 1000;
                 
                 interval = setInterval(() => {
                     node.emit("input", {});
@@ -176,12 +186,13 @@ module.exports = function(RED) {
             try {
                 const bucketValue = getBucket(msg);
                 const s3 = configureS3(node, msg, getValue);
+                const filepatternValue = getValue(node.filepattern, node.filepatternType, msg) || "";
                 
                 await node.listAllObjects(s3, { Bucket: bucketValue }, contents, (err, data) => {
                     if (err) {
                         throw err;
                     }
-                    const newContents = node.filterContents(data);
+                    const newContents = node.filterContents(data, filepatternValue);
                     const seen = {};
                     msg.bucket = bucketValue;
                     node.state.forEach(e => { seen[e] = true; });
@@ -229,16 +240,16 @@ module.exports = function(RED) {
 
     RED.nodes.registerType("aws-s3-in", AmazonS3InNode);
 
-    AmazonS3InNode.prototype.filterContents = function (contents) {
-        return this.filepattern ? contents.filter(e => minimatch(e.Key, this.filepattern)) : contents;
+    AmazonS3InNode.prototype.filterContents = function (contents, filepattern) {
+        return filepattern ? contents.filter(e => minimatch(e.Key, filepattern)) : contents;
     };
 
     // Amazon S3 Query Node
-    async function handleInput(node, msg, s3) {
+    async function handleInput(node, msg, s3, returnBuffer) {
         try {
-            // Получаем значения bucket динамически
-            const bucket = msg.bucket || getValue(node.bucket, node.bucketType, msg);
-            const filename = node.filename || msg.filename;
+            // Bucket and filename are already resolved in the input handler
+            const bucket = msg.bucket;
+            const filename = msg.filename;
 
             if (!bucket) {
                 node.error("No S3 bucket specified", msg);
@@ -268,7 +279,8 @@ module.exports = function(RED) {
             
             stream.on('end', () => {
                 const buffer = Buffer.concat(chunks);
-                if (node.returnBuffer === 'yes'){
+                const returnBufferValue = returnBuffer || 'yes';
+                if (returnBufferValue === 'yes' || returnBufferValue === true || returnBufferValue === 'true'){
                     msg.payload = buffer;
                 }else {
                     msg.payload = buffer.toString();
@@ -308,6 +320,7 @@ module.exports = function(RED) {
         this.filename = n.filename || "";
         this.createSignedUrl = n.createSignedUrl || 'no';
         this.returnBuffer = n.returnBuffer || 'yes';
+        this.returnBufferType = n.returnBufferType || 'str';
         // Преобразуем urlExpiration в число, гарантируем минимум 1 секунду
         const expiration = parseInt(n.urlExpiration, 10);
         this.urlExpiration = (!isNaN(expiration) && expiration > 0) ? expiration : 60;
@@ -368,6 +381,7 @@ module.exports = function(RED) {
             msg.filename = filename;
 
             const s3 = configureS3(node, msg, getValue);
+            const returnBufferValue = getValue(node.returnBuffer, node.returnBufferType, msg) || 'yes';
 
             if (node.createSignedUrl === 'yes') {
                 try {
@@ -381,7 +395,7 @@ module.exports = function(RED) {
                     node.status({ fill: "red", shape: "ring", text: "aws.status.error" });
                 }
             } else {
-                await handleInput(node, msg, s3);
+                await handleInput(node, msg, s3, returnBufferValue);
             }
         });
     }
