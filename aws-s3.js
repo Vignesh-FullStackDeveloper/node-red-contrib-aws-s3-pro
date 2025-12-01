@@ -5,6 +5,12 @@ module.exports = function(RED) {
     const { PassThrough } = require('stream');
     const { S3Client, GetObjectCommand, PutObjectCommand, ListObjectsCommand } = require("@aws-sdk/client-s3");
     const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+    const { getPooledS3Client, shutdownPool } = require('./s3-connection-pool');
+
+    // Register cleanup handler for Node-RED shutdown
+    RED.events.on('close', () => {
+        shutdownPool();
+    });
 
     function configureS3(node, msg, getValue) {
         // Получаем параметры из конфигурации или контекста
@@ -37,8 +43,8 @@ module.exports = function(RED) {
                 };
             }
         }
-        // Диагностика
-        return new S3Client(options);
+        // Use connection pool instead of creating new client
+        return getPooledS3Client(options);
     }
 
     function AWSNode(n) {

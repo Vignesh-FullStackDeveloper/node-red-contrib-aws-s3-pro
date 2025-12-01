@@ -1,12 +1,12 @@
 {
-  "name": "node-red-contrib-aws-s3",
-  "version": "2.2.0",
+  "name": "node-red-contrib-aws-s3-pro",
+  "version": "1.0.0",
   "description": "A Node-RED node to watch, save and retreive files from an Amazon S3 bucket",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.682.0",
     "@aws-sdk/s3-request-presigner": "^3.682.0",
-    "minimatch": "^10.0.1",
-    "stream": "^0.0.3"
+    "@smithy/node-http-handler": "^3.0.0",
+    "minimatch": "^10.0.1"
   },
   "main": "aws-s3.js",
   "scripts": {
@@ -14,13 +14,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lotockii/node-red-contrib-aws-s3.git"
+    "url": "git+https://github.com/Vignesh-FullStackDeveloper/node-red-contrib-aws-s3-pro.git"
   },
   "keywords": [
     "node-red",
-    "aws-services",
+    "node-red-contrib",
+    "aws",
     "aws-s3",
-    "s3"
+    "s3",
+    "s3-pool",
+    "connection-pool"
   ],
   "engines": {
     "node": ">=12.0.0"
@@ -31,10 +34,10 @@
       "awsS3": "aws-s3.js"
     }
   },
-  "author": "Andrii Lototskyi <dn050992lan@gmail.com>",
+  "author": "Vignesh <vigneshkumar.officialmailbox@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/lotockii/node-red-contrib-aws-s3/issues"
-  },
-  "homepage": "https://github.com/lotockii/node-red-contrib-aws-s3#readme"
+  "url": "https://github.com/Vignesh-FullStackDeveloper/node-red-contrib-aws-s3-pro/issues"
+},
+"homepage": "https://github.com/Vignesh-FullStackDeveloper/node-red-contrib-aws-s3-pro#readme"
 }
