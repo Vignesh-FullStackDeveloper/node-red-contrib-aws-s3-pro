@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-aws-s3-pro",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "A Node-RED node for Amazon S3 operations with production-grade connection pooling. Supports all S3 operations via AWS SDK v3.",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.682.0",
