@@ -2,76 +2,123 @@
   {
     "id": "6bf9c09279d80258",
     "type": "tab",
-    "label": "AWS S3",
+    "label": "AWS S3 Examples",
     "disabled": false,
     "info": "",
     "env": []
   },
   {
-    "id": "3370cb364e863dfc",
-    "type": "aws-s3-in",
-    "z": "6bf9c09279d80258",
-    "aws": "",
-    "bucket": "bucket",
-    "region": "eu-central-1",
-    "filepattern": "*.txt",
-    "name": "Get *.txt Files",
-    "x": 110,
-    "y": 100,
-    "wires": [
-      [
-        "3b79547fb3d1cb1e"
-      ]
-    ]
+    "id": "aws-config-1",
+    "type": "aws-s3-config",
+    "name": "My AWS S3 Config",
+    "region": "us-east-1",
+    "regionType": "str",
+    "accessKeyId": "",
+    "accessKeyIdType": "str",
+    "secretAccessKey": "",
+    "secretAccessKeyType": "str",
+    "useIamRole": false,
+    "endpoint": "",
+    "endpointType": "str",
+    "forcepathstyle": false,
+    "skiptlsverify": false
   },
   {
     "id": "e02e472cb56ae101",
     "type": "comment",
     "z": "6bf9c09279d80258",
-    "name": "GET All *.txt FILES FROM BUCKET",
+    "name": "LIST ALL BUCKETS",
     "info": "",
     "x": 180,
     "y": 60,
     "wires": []
   },
   {
-    "id": "3b79547fb3d1cb1e",
-    "type": "debug",
+    "id": "list-buckets-node",
+    "type": "aws-s3",
     "z": "6bf9c09279d80258",
-    "name": "debug 1",
-    "active": true,
-    "tosidebar": true,
-    "console": false,
-    "tostatus": false,
-    "complete": "true",
-    "targetType": "full",
-    "statusVal": "",
-    "statusType": "auto",
-    "x": 460,
-    "y": 100,
-    "wires": []
-  },
-  {
-    "id": "8d8007b38d51681f",
-    "type": "aws-s3-handle",
-    "z": "6bf9c09279d80258",
-    "aws": "",
-    "bucket": "bucket",
-    "filename": "files/file.txt",
-    "region": "eu-central-1",
-    "name": "Get Link To File",
-    "createSignedUrl": "yes",
-    "returnBuffer": "yes",
+    "aws": "aws-config-1",
+    "operation": "ListBuckets",
+    "name": "List Buckets",
     "x": 300,
-    "y": 220,
+    "y": 100,
     "wires": [
       [
-        "159677c2d4b3218d"
+        "debug-list-buckets"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "inject-list-buckets",
+    "type": "inject",
+    "z": "6bf9c09279d80258",
+    "name": "Run",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 110,
+    "y": 100,
+    "wires": [
+      [
+        "list-buckets-node"
       ]
     ]
   },
   {
-    "id": "cc7d8de164374f35",
+    "id": "debug-list-buckets",
+    "type": "debug",
+    "z": "6bf9c09279d80258",
+    "name": "Buckets",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 480,
+    "y": 100,
+    "wires": []
+  },
+  {
+    "id": "comment-list-objects",
+    "type": "comment",
+    "z": "6bf9c09279d80258",
+    "name": "LIST OBJECTS IN BUCKET",
+    "info": "",
+    "x": 180,
+    "y": 180,
+    "wires": []
+  },
+  {
+    "id": "list-objects-node",
+    "type": "aws-s3",
+    "z": "6bf9c09279d80258",
+    "aws": "aws-config-1",
+    "operation": "ListObjectsV2",
+    "name": "List Objects",
+    "x": 300,
+    "y": 220,
+    "wires": [
+      [
+        "debug-list-objects"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "inject-list-objects",
     "type": "inject",
     "z": "6bf9c09279d80258",
     "name": "Run",
@@ -80,7 +127,8 @@
         "p": "payload"
       },
       {
-        "p": "topic",
+        "p": "Bucket",
+        "v": "my-bucket",
         "vt": "str"
       }
     ],
@@ -95,31 +143,21 @@
     "y": 220,
     "wires": [
       [
-        "8d8007b38d51681f"
+        "list-objects-node"
       ]
     ]
   },
   {
-    "id": "6f184b1945772a7e",
-    "type": "comment",
-    "z": "6bf9c09279d80258",
-    "name": "GET Temporary Link for 5 min",
-    "info": "",
-    "x": 160,
-    "y": 180,
-    "wires": []
-  },
-  {
-    "id": "159677c2d4b3218d",
+    "id": "debug-list-objects",
     "type": "debug",
     "z": "6bf9c09279d80258",
-    "name": "debug 2",
+    "name": "Objects",
     "active": true,
     "tosidebar": true,
     "console": false,
     "tostatus": false,
-    "complete": "true",
-    "targetType": "full",
+    "complete": "payload",
+    "targetType": "msg",
     "statusVal": "",
     "statusType": "auto",
     "x": 480,
@@ -127,30 +165,48 @@
     "wires": []
   },
   {
-    "id": "0113494f6ca10a62",
-    "type": "aws-s3-out",
+    "id": "comment-get-object",
+    "type": "comment",
     "z": "6bf9c09279d80258",
-    "aws": "",
-    "bucket": "bucket",
-    "filename": "",
-    "localFilename": "",
-    "region": "eu-central-1",
-    "name": "Save to S3",
-    "x": 470,
-    "y": 340,
+    "name": "GET OBJECT (DOWNLOAD FILE)",
+    "info": "",
+    "x": 180,
+    "y": 300,
     "wires": []
   },
   {
-    "id": "99d05a4fe666d6f7",
+    "id": "get-object-node",
+    "type": "aws-s3",
+    "z": "6bf9c09279d80258",
+    "aws": "aws-config-1",
+    "operation": "GetObject",
+    "name": "Get Object",
+    "x": 300,
+    "y": 340,
+    "wires": [
+      [
+        "debug-get-object"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "inject-get-object",
     "type": "inject",
     "z": "6bf9c09279d80258",
-    "name": "",
+    "name": "Run",
     "props": [
       {
         "p": "payload"
       },
       {
-        "p": "topic",
+        "p": "Bucket",
+        "v": "my-bucket",
+        "vt": "str"
+      },
+      {
+        "p": "Key",
+        "v": "path/to/file.txt",
         "vt": "str"
       }
     ],
@@ -161,42 +217,170 @@
     "topic": "",
     "payload": "",
     "payloadType": "date",
-    "x": 120,
+    "x": 110,
     "y": 340,
     "wires": [
       [
-        "30bb7e05bcf79fd3"
+        "get-object-node"
       ]
     ]
   },
   {
-    "id": "eaa2b7c854f6c4e7",
-    "type": "comment",
+    "id": "debug-get-object",
+    "type": "debug",
     "z": "6bf9c09279d80258",
-    "name": "SAVE FILE TO S3 BUKCET",
-    "info": "",
-    "x": 150,
-    "y": 300,
+    "name": "File Content",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 480,
+    "y": 340,
     "wires": []
   },
   {
-    "id": "30bb7e05bcf79fd3",
+    "id": "comment-put-object",
+    "type": "comment",
+    "z": "6bf9c09279d80258",
+    "name": "PUT OBJECT (UPLOAD FILE)",
+    "info": "",
+    "x": 180,
+    "y": 420,
+    "wires": []
+  },
+  {
+    "id": "put-object-node",
+    "type": "aws-s3",
+    "z": "6bf9c09279d80258",
+    "aws": "aws-config-1",
+    "operation": "PutObject",
+    "name": "Put Object",
+    "x": 300,
+    "y": 460,
+    "wires": [
+      [
+        "debug-put-object"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "function-prepare-upload",
     "type": "function",
     "z": "6bf9c09279d80258",
-    "name": "Prepare data",
-    "func": "msg.payload = \"Text to save in S3...\";\nmsg.filename = \"files/test_text.txt\";\n\n\nreturn msg;",
+    "name": "Prepare Upload",
+    "func": "msg.Bucket = \"my-bucket\";\nmsg.Key = \"path/to/uploaded-file.txt\";\nmsg.payload = \"This is the file content to upload to S3\";\nmsg.ContentType = \"text/plain\";\n\nreturn msg;",
     "outputs": 1,
     "timeout": 0,
     "noerr": 0,
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 290,
-    "y": 340,
+    "x": 110,
+    "y": 460,
     "wires": [
       [
-        "0113494f6ca10a62"
+        "put-object-node"
       ]
     ]
+  },
+  {
+    "id": "debug-put-object",
+    "type": "debug",
+    "z": "6bf9c09279d80258",
+    "name": "Upload Result",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 480,
+    "y": 460,
+    "wires": []
+  },
+  {
+    "id": "comment-delete-object",
+    "type": "comment",
+    "z": "6bf9c09279d80258",
+    "name": "DELETE OBJECT",
+    "info": "",
+    "x": 180,
+    "y": 540,
+    "wires": []
+  },
+  {
+    "id": "delete-object-node",
+    "type": "aws-s3",
+    "z": "6bf9c09279d80258",
+    "aws": "aws-config-1",
+    "operation": "DeleteObject",
+    "name": "Delete Object",
+    "x": 300,
+    "y": 580,
+    "wires": [
+      [
+        "debug-delete-object"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "inject-delete-object",
+    "type": "inject",
+    "z": "6bf9c09279d80258",
+    "name": "Run",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "Bucket",
+        "v": "my-bucket",
+        "vt": "str"
+      },
+      {
+        "p": "Key",
+        "v": "path/to/file-to-delete.txt",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 110,
+    "y": 580,
+    "wires": [
+      [
+        "delete-object-node"
+      ]
+    ]
+  },
+  {
+    "id": "debug-delete-object",
+    "type": "debug",
+    "z": "6bf9c09279d80258",
+    "name": "Delete Result",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 480,
+    "y": 580,
+    "wires": []
   }
 ]

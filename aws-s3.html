@@ -133,119 +133,140 @@
 </script>
 <script type="text/x-red" data-template-name="aws-s3">
     <div class="form-row">
-        <label for="node-input-aws"><i class="fa fa-user"></i> <span data-i18n="aws.label.aws"></span></label>
-        <input type="text" id="node-input-aws">
+        <label for="node-input-aws"><i class="fa fa-cog"></i> AWS Configuration</label>
+        <input type="text" id="node-input-aws" placeholder="Select AWS S3 configuration">
     </div>
-    <div class="form-row">
-        <label for="node-input-operation"><i class="fa fa-wrench"></i> Operation</label>
-        <select type="text" id="node-input-operation" style="width: 100%;">
-            <option value="AbortMultipartUpload">AbortMultipartUpload</option>
-            <option value="CompleteMultipartUpload">CompleteMultipartUpload</option>
-            <option value="CopyObject">CopyObject</option>
-            <option value="CreateBucket">CreateBucket</option>
-            <option value="CreateMultipartUpload">CreateMultipartUpload</option>
-            <option value="DeleteBucket">DeleteBucket</option>
-            <option value="DeleteBucketAnalyticsConfiguration">DeleteBucketAnalyticsConfiguration</option>
-            <option value="DeleteBucketCors">DeleteBucketCors</option>
-            <option value="DeleteBucketEncryption">DeleteBucketEncryption</option>
-            <option value="DeleteBucketIntelligentTieringConfiguration">DeleteBucketIntelligentTieringConfiguration</option>
-            <option value="DeleteBucketInventoryConfiguration">DeleteBucketInventoryConfiguration</option>
-            <option value="DeleteBucketLifecycle">DeleteBucketLifecycle</option>
-            <option value="DeleteBucketMetricsConfiguration">DeleteBucketMetricsConfiguration</option>
-            <option value="DeleteBucketOwnershipControls">DeleteBucketOwnershipControls</option>
-            <option value="DeleteBucketPolicy">DeleteBucketPolicy</option>
-            <option value="DeleteBucketReplication">DeleteBucketReplication</option>
-            <option value="DeleteBucketTagging">DeleteBucketTagging</option>
-            <option value="DeleteBucketWebsite">DeleteBucketWebsite</option>
-            <option value="DeleteObject">DeleteObject</option>
-            <option value="DeleteObjectTagging">DeleteObjectTagging</option>
-            <option value="DeleteObjects">DeleteObjects</option>
-            <option value="DeletePublicAccessBlock">DeletePublicAccessBlock</option>
-            <option value="GetBucketAccelerateConfiguration">GetBucketAccelerateConfiguration</option>
-            <option value="GetBucketAcl">GetBucketAcl</option>
-            <option value="GetBucketAnalyticsConfiguration">GetBucketAnalyticsConfiguration</option>
-            <option value="GetBucketCors">GetBucketCors</option>
-            <option value="GetBucketEncryption">GetBucketEncryption</option>
-            <option value="GetBucketIntelligentTieringConfiguration">GetBucketIntelligentTieringConfiguration</option>
-            <option value="GetBucketInventoryConfiguration">GetBucketInventoryConfiguration</option>
-            <option value="GetBucketLifecycle">GetBucketLifecycle</option>
-            <option value="GetBucketLifecycleConfiguration">GetBucketLifecycleConfiguration</option>
-            <option value="GetBucketLocation">GetBucketLocation</option>
-            <option value="GetBucketLogging">GetBucketLogging</option>
-            <option value="GetBucketMetricsConfiguration">GetBucketMetricsConfiguration</option>
-            <option value="GetBucketNotification">GetBucketNotification</option>
-            <option value="GetBucketNotificationConfiguration">GetBucketNotificationConfiguration</option>
-            <option value="GetBucketOwnershipControls">GetBucketOwnershipControls</option>
-            <option value="GetBucketPolicy">GetBucketPolicy</option>
-            <option value="GetBucketPolicyStatus">GetBucketPolicyStatus</option>
-            <option value="GetBucketReplication">GetBucketReplication</option>
-            <option value="GetBucketRequestPayment">GetBucketRequestPayment</option>
-            <option value="GetBucketTagging">GetBucketTagging</option>
-            <option value="GetBucketVersioning">GetBucketVersioning</option>
-            <option value="GetBucketWebsite">GetBucketWebsite</option>
-            <option value="GetObject">GetObject</option>
-            <option value="GetObjectAcl">GetObjectAcl</option>
-            <option value="GetObjectLegalHold">GetObjectLegalHold</option>
-            <option value="GetObjectLockConfiguration">GetObjectLockConfiguration</option>
-            <option value="GetObjectRetention">GetObjectRetention</option>
-            <option value="GetObjectTagging">GetObjectTagging</option>
-            <option value="GetObjectTorrent">GetObjectTorrent</option>
-            <option value="GetPublicAccessBlock">GetPublicAccessBlock</option>
-            <option value="HeadBucket">HeadBucket</option>
-            <option value="HeadObject">HeadObject</option>
-            <option value="ListBucketAnalyticsConfigurations">ListBucketAnalyticsConfigurations</option>
-            <option value="ListBucketIntelligentTieringConfigurations">ListBucketIntelligentTieringConfigurations</option>
-            <option value="ListBucketInventoryConfigurations">ListBucketInventoryConfigurations</option>
-            <option value="ListBucketMetricsConfigurations">ListBucketMetricsConfigurations</option>
-            <option value="ListBuckets">ListBuckets</option>
-            <option value="ListMultipartUploads">ListMultipartUploads</option>
-            <option value="ListObjectVersions">ListObjectVersions</option>
-            <option value="ListObjects">ListObjects</option>
-            <option value="ListObjectsV2">ListObjectsV2</option>
-            <option value="ListParts">ListParts</option>
-            <option value="PutBucketAccelerateConfiguration">PutBucketAccelerateConfiguration</option>
-            <option value="PutBucketAcl">PutBucketAcl</option>
-            <option value="PutBucketAnalyticsConfiguration">PutBucketAnalyticsConfiguration</option>
-            <option value="PutBucketCors">PutBucketCors</option>
-            <option value="PutBucketEncryption">PutBucketEncryption</option>
-            <option value="PutBucketIntelligentTieringConfiguration">PutBucketIntelligentTieringConfiguration</option>
-            <option value="PutBucketInventoryConfiguration">PutBucketInventoryConfiguration</option>
-            <option value="PutBucketLifecycle">PutBucketLifecycle</option>
-            <option value="PutBucketLifecycleConfiguration">PutBucketLifecycleConfiguration</option>
-            <option value="PutBucketLogging">PutBucketLogging</option>
-            <option value="PutBucketMetricsConfiguration">PutBucketMetricsConfiguration</option>
-            <option value="PutBucketNotification">PutBucketNotification</option>
-            <option value="PutBucketNotificationConfiguration">PutBucketNotificationConfiguration</option>
-            <option value="PutBucketOwnershipControls">PutBucketOwnershipControls</option>
-            <option value="PutBucketPolicy">PutBucketPolicy</option>
-            <option value="PutBucketReplication">PutBucketReplication</option>
-            <option value="PutBucketRequestPayment">PutBucketRequestPayment</option>
-            <option value="PutBucketTagging">PutBucketTagging</option>
-            <option value="PutBucketVersioning">PutBucketVersioning</option>
-            <option value="PutBucketWebsite">PutBucketWebsite</option>
-            <option value="PutObject">PutObject</option>
-            <option value="PutObjectAcl">PutObjectAcl</option>
-            <option value="PutObjectLegalHold">PutObjectLegalHold</option>
-            <option value="PutObjectLockConfiguration">PutObjectLockConfiguration</option>
-            <option value="PutObjectRetention">PutObjectRetention</option>
-            <option value="PutObjectTagging">PutObjectTagging</option>
-            <option value="PutPublicAccessBlock">PutPublicAccessBlock</option>
-            <option value="RestoreObject">RestoreObject</option>
-            <option value="SelectObjectContent">SelectObjectContent</option>
-            <option value="UploadPart">UploadPart</option>
-            <option value="UploadPartCopy">UploadPartCopy</option>
+    
+    <div class="form-row" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">
+        <label for="node-input-operation"><i class="fa fa-wrench"></i> S3 Operation</label>
+        <select type="text" id="node-input-operation" style="width: 100%; font-size: 13px;">
+            <optgroup label="Common Operations">
+                <option value="ListBuckets">ListBuckets - List all buckets</option>
+                <option value="ListObjectsV2">ListObjectsV2 - List objects in bucket</option>
+                <option value="GetObject">GetObject - Download object</option>
+                <option value="PutObject">PutObject - Upload object</option>
+                <option value="DeleteObject">DeleteObject - Delete object</option>
+                <option value="CopyObject">CopyObject - Copy object</option>
+                <option value="HeadObject">HeadObject - Get object metadata</option>
+            </optgroup>
+            <optgroup label="Delete Operations">
+                <option value="DeleteBucket">DeleteBucket</option>
+                <option value="DeleteObjects">DeleteObjects - Delete multiple objects</option>
+                <option value="DeleteObjectTagging">DeleteObjectTagging</option>
+                <option value="DeleteBucketCors">DeleteBucketCors</option>
+                <option value="DeleteBucketEncryption">DeleteBucketEncryption</option>
+                <option value="DeleteBucketLifecycle">DeleteBucketLifecycle</option>
+                <option value="DeleteBucketPolicy">DeleteBucketPolicy</option>
+                <option value="DeleteBucketTagging">DeleteBucketTagging</option>
+                <option value="DeleteBucketWebsite">DeleteBucketWebsite</option>
+                <option value="DeleteBucketAnalyticsConfiguration">DeleteBucketAnalyticsConfiguration</option>
+                <option value="DeleteBucketIntelligentTieringConfiguration">DeleteBucketIntelligentTieringConfiguration</option>
+                <option value="DeleteBucketInventoryConfiguration">DeleteBucketInventoryConfiguration</option>
+                <option value="DeleteBucketMetricsConfiguration">DeleteBucketMetricsConfiguration</option>
+                <option value="DeleteBucketOwnershipControls">DeleteBucketOwnershipControls</option>
+                <option value="DeleteBucketReplication">DeleteBucketReplication</option>
+                <option value="DeletePublicAccessBlock">DeletePublicAccessBlock</option>
+            </optgroup>
+            <optgroup label="Get Operations">
+                <option value="GetBucketAcl">GetBucketAcl</option>
+                <option value="GetBucketCors">GetBucketCors</option>
+                <option value="GetBucketEncryption">GetBucketEncryption</option>
+                <option value="GetBucketLifecycle">GetBucketLifecycle</option>
+                <option value="GetBucketLifecycleConfiguration">GetBucketLifecycleConfiguration</option>
+                <option value="GetBucketLocation">GetBucketLocation</option>
+                <option value="GetBucketLogging">GetBucketLogging</option>
+                <option value="GetBucketPolicy">GetBucketPolicy</option>
+                <option value="GetBucketPolicyStatus">GetBucketPolicyStatus</option>
+                <option value="GetBucketReplication">GetBucketReplication</option>
+                <option value="GetBucketRequestPayment">GetBucketRequestPayment</option>
+                <option value="GetBucketTagging">GetBucketTagging</option>
+                <option value="GetBucketVersioning">GetBucketVersioning</option>
+                <option value="GetBucketWebsite">GetBucketWebsite</option>
+                <option value="GetBucketAccelerateConfiguration">GetBucketAccelerateConfiguration</option>
+                <option value="GetBucketAnalyticsConfiguration">GetBucketAnalyticsConfiguration</option>
+                <option value="GetBucketIntelligentTieringConfiguration">GetBucketIntelligentTieringConfiguration</option>
+                <option value="GetBucketInventoryConfiguration">GetBucketInventoryConfiguration</option>
+                <option value="GetBucketMetricsConfiguration">GetBucketMetricsConfiguration</option>
+                <option value="GetBucketNotification">GetBucketNotification</option>
+                <option value="GetBucketNotificationConfiguration">GetBucketNotificationConfiguration</option>
+                <option value="GetBucketOwnershipControls">GetBucketOwnershipControls</option>
+                <option value="GetObjectAcl">GetObjectAcl</option>
+                <option value="GetObjectLegalHold">GetObjectLegalHold</option>
+                <option value="GetObjectLockConfiguration">GetObjectLockConfiguration</option>
+                <option value="GetObjectRetention">GetObjectRetention</option>
+                <option value="GetObjectTagging">GetObjectTagging</option>
+                <option value="GetObjectTorrent">GetObjectTorrent</option>
+                <option value="GetPublicAccessBlock">GetPublicAccessBlock</option>
+            </optgroup>
+            <optgroup label="Put Operations">
+                <option value="PutBucketAcl">PutBucketAcl</option>
+                <option value="PutBucketCors">PutBucketCors</option>
+                <option value="PutBucketEncryption">PutBucketEncryption</option>
+                <option value="PutBucketLifecycle">PutBucketLifecycle</option>
+                <option value="PutBucketLifecycleConfiguration">PutBucketLifecycleConfiguration</option>
+                <option value="PutBucketLogging">PutBucketLogging</option>
+                <option value="PutBucketPolicy">PutBucketPolicy</option>
+                <option value="PutBucketReplication">PutBucketReplication</option>
+                <option value="PutBucketRequestPayment">PutBucketRequestPayment</option>
+                <option value="PutBucketTagging">PutBucketTagging</option>
+                <option value="PutBucketVersioning">PutBucketVersioning</option>
+                <option value="PutBucketWebsite">PutBucketWebsite</option>
+                <option value="PutBucketAccelerateConfiguration">PutBucketAccelerateConfiguration</option>
+                <option value="PutBucketAnalyticsConfiguration">PutBucketAnalyticsConfiguration</option>
+                <option value="PutBucketIntelligentTieringConfiguration">PutBucketIntelligentTieringConfiguration</option>
+                <option value="PutBucketInventoryConfiguration">PutBucketInventoryConfiguration</option>
+                <option value="PutBucketMetricsConfiguration">PutBucketMetricsConfiguration</option>
+                <option value="PutBucketNotification">PutBucketNotification</option>
+                <option value="PutBucketNotificationConfiguration">PutBucketNotificationConfiguration</option>
+                <option value="PutBucketOwnershipControls">PutBucketOwnershipControls</option>
+                <option value="PutObjectAcl">PutObjectAcl</option>
+                <option value="PutObjectLegalHold">PutObjectLegalHold</option>
+                <option value="PutObjectLockConfiguration">PutObjectLockConfiguration</option>
+                <option value="PutObjectRetention">PutObjectRetention</option>
+                <option value="PutObjectTagging">PutObjectTagging</option>
+                <option value="PutPublicAccessBlock">PutPublicAccessBlock</option>
+            </optgroup>
+            <optgroup label="List Operations">
+                <option value="ListObjects">ListObjects - List objects (legacy API)</option>
+                <option value="ListObjectVersions">ListObjectVersions</option>
+                <option value="ListMultipartUploads">ListMultipartUploads</option>
+                <option value="ListParts">ListParts</option>
+                <option value="ListBucketAnalyticsConfigurations">ListBucketAnalyticsConfigurations</option>
+                <option value="ListBucketIntelligentTieringConfigurations">ListBucketIntelligentTieringConfigurations</option>
+                <option value="ListBucketInventoryConfigurations">ListBucketInventoryConfigurations</option>
+                <option value="ListBucketMetricsConfigurations">ListBucketMetricsConfigurations</option>
+            </optgroup>
+            <optgroup label="Other Operations">
+                <option value="CreateBucket">CreateBucket</option>
+                <option value="HeadBucket">HeadBucket - Check bucket exists</option>
+                <option value="RestoreObject">RestoreObject - Restore from Glacier</option>
+                <option value="SelectObjectContent">SelectObjectContent - SQL query</option>
+                <option value="CreateMultipartUpload">CreateMultipartUpload</option>
+                <option value="UploadPart">UploadPart</option>
+                <option value="UploadPartCopy">UploadPartCopy</option>
+                <option value="CompleteMultipartUpload">CompleteMultipartUpload</option>
+                <option value="AbortMultipartUpload">AbortMultipartUpload</option>
+            </optgroup>
         </select>
     </div>
-    <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="aws.label.name"></span></label>
-        <input type="text" id="node-input-name" data-i18n="[placeholder]aws.placeholder.name">
+    
+    <div class="form-row" style="margin-top: 15px;">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Node Name</label>
+        <input type="text" id="node-input-name" placeholder="Leave blank for auto-generated name" style="width: 100%;">
     </div>
-    <div class="form-row">
-        <span style="color: #888; font-size: 0.90em;">
-            <b>Note:</b> Operation parameters should be provided in the message object (msg). 
-            For example: msg.Bucket, msg.Key, msg.Body, etc. 
-            Complex objects can be provided as JSON strings and will be automatically parsed.
-        </span>
+    
+    <div class="form-row" style="margin-top: 20px; padding: 12px; background-color: #f0f7ff; border-left: 3px solid #4a90e2; border-radius: 3px;">
+        <div style="color: #2c3e50; font-size: 0.92em; line-height: 1.5;">
+            <i class="fa fa-info-circle" style="color: #4a90e2; margin-right: 6px;"></i>
+            <strong>Parameters:</strong> Provide operation parameters in the message object (msg).<br>
+            <span style="margin-left: 20px; color: #555;">
+                • Common: <code style="background: #fff; padding: 2px 6px; border-radius: 2px;">msg.Bucket</code>, 
+                <code style="background: #fff; padding: 2px 6px; border-radius: 2px;">msg.Key</code>, 
+                <code style="background: #fff; padding: 2px 6px; border-radius: 2px;">msg.Body</code><br>
+                • For PutObject: Use <code style="background: #fff; padding: 2px 6px; border-radius: 2px;">msg.payload</code> as file content<br>
+                • Complex objects: Provide as JSON strings (auto-parsed)
+            </span>
+        </div>
     </div>
 </script>
 
@@ -268,10 +289,25 @@
             return this.name || "S3 API " + this.operation;
         },
         oneditprepare: function() {
-            $("#node-input-operation").val(this.operation || 'ListBuckets');
+            var operation = this.operation || 'ListBuckets';
+            $("#node-input-operation").val(operation);
+            
+            // Extract just the operation name if it has description
+            var operationName = operation.split(' - ')[0];
+            if (operationName !== operation) {
+                // If we have a description, find the matching option
+                $("#node-input-operation option").each(function() {
+                    if ($(this).val().split(' - ')[0] === operationName) {
+                        $(this).prop('selected', true);
+                        return false;
+                    }
+                });
+            }
         },
         oneditsave: function() {
-            this.operation = $("#node-input-operation").val();
+            var selectedValue = $("#node-input-operation").val();
+            // Extract just the operation name (remove description if present)
+            this.operation = selectedValue.split(' - ')[0];
         }
     });
 </script>
