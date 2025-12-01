@@ -1,4 +1,4 @@
-node-red-contrib-aws-s3
+node-red-contrib-aws-s3-pro
 =================
 
 Edited by: Andrii Lototskyi
@@ -13,7 +13,7 @@ Install
 
 Run the following command in the root directory of your Node-RED install
 
-        npm install node-red-contrib-aws-s3
+        npm install node-red-contrib-aws-s3-pro
 
 Usage
 -----
